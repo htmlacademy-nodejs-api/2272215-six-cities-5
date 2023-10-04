@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Lenara](https://up.htmlacademy.ru/nodejs-api/5/user/2272215).
-* Наставник: `Неизвестно`.
+* Наставник: [Ярослав Денисенко](https://htmlacademy.ru/profile/id2412489).
 
 ---
 
