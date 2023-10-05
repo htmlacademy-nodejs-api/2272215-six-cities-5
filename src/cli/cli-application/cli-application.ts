@@ -1,6 +1,6 @@
 import { CommandCollection } from './types.js';
-import { NO_COMMAND, COMMAND_EXECUTION_ERROR } from './constants.js';
-import { Command, HelpCommand, VersionCommand } from '../commands/index.js';
+import { NO_COMMAND } from './constants.js';
+import { Command, HelpCommand, VersionCommand, ImportCommand } from '../commands/index.js';
 
 
 export class CLIApplication {
@@ -15,6 +15,7 @@ export class CLIApplication {
     const commandList: Command[] = [
       new HelpCommand(),
       new VersionCommand(),
+      new ImportCommand(),
     ];
 
     commandList.forEach((command) => {
@@ -34,11 +35,7 @@ export class CLIApplication {
     const foundCommand = this.getCommandByName(inputCommandName);
 
     if(foundCommand) {
-      try {
-        foundCommand.execute(...inputCommandArgs);
-      } catch(err) {
-        console.error(COMMAND_EXECUTION_ERROR);
-      }
+      foundCommand.execute(...inputCommandArgs);
     } else if(this.isCommandWithoutPrefix(inputCommandName)) {
       const error = `${NO_COMMAND}. Может Вы имели в виду --${inputCommandName}?`;
       console.info(error);
