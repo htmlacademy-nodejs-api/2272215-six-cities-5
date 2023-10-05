@@ -26,6 +26,11 @@ export class CLIApplication {
     const [_first, _second, ...restArgs] = process.argv;
     const [inputCommandName, ...inputCommandArgs] = restArgs;
 
+    if(!restArgs.length) {
+      this.getCommandByName('--help')?.execute();
+      return;
+    }
+
     const foundCommand = this.getCommandByName(inputCommandName);
 
     if(foundCommand) {
