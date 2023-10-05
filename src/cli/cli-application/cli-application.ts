@@ -35,13 +35,23 @@ export class CLIApplication {
         console.error(COMMAND_EXECUTION_ERROR);
       }
     }
+    else if(this.isCommandWithoutPrefix(inputCommandName)) {
+      const error = `${NO_COMMAND}. Может Вы имели в виду --${inputCommandName}?`;
+      console.info(error);
+    }
     else {
       console.info(NO_COMMAND);
     }
   }
 
-  private getCommandByName(name: string): Command | null {
-    const foundCommandName = Object.keys(this.commands).find((key) => key === name);
+  private getCommandByName(commandName: string): Command | null {
+    const foundCommandName = Object.keys(this.commands).find((key) => key === commandName);
     return foundCommandName ? this.commands[foundCommandName] : null;
+  }
+
+  private isCommandWithoutPrefix(commandName: string): boolean {
+    const prefixCommandName = `--${commandName}`;
+    const foundCommandName = Object.keys(this.commands).find((key) => key === prefixCommandName);
+    return !!foundCommandName;
   }
 }
