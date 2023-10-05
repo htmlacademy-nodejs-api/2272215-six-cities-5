@@ -19,11 +19,11 @@ export class CLIApplication {
 
     commandList.forEach((command) => {
       this.commands[command.getName()] = command;
-    })
+    });
   }
 
   private executeCommand(): void {
-    const [_, __, ...restArgs] = process.argv;
+    const [_first, _second, ...restArgs] = process.argv;
     const [inputCommandName, ...inputCommandArgs] = restArgs;
 
     const foundCommand = this.getCommandByName(inputCommandName);
@@ -31,16 +31,13 @@ export class CLIApplication {
     if(foundCommand) {
       try {
         foundCommand.execute(...inputCommandArgs);
-      }
-      catch(err) {
+      } catch(err) {
         console.error(COMMAND_EXECUTION_ERROR);
       }
-    }
-    else if(this.isCommandWithoutPrefix(inputCommandName)) {
+    } else if(this.isCommandWithoutPrefix(inputCommandName)) {
       const error = `${NO_COMMAND}. Может Вы имели в виду --${inputCommandName}?`;
       console.info(error);
-    }
-    else {
+    } else {
       console.info(NO_COMMAND);
     }
   }

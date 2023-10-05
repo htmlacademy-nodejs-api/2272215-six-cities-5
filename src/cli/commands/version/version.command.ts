@@ -16,8 +16,7 @@ export class VersionCommand implements Command {
 
     if(version) {
       console.info(`Version: ${version}`);
-    }
-    else {
+    } else {
       console.error(VERSION_READ_ERROR);
     }
   }
@@ -32,8 +31,7 @@ export class VersionCommand implements Command {
       if(typeof jsonContent.version === 'string') {
         result = jsonContent.version;
       }
-    }
-    catch(error) {
+    } catch(error) {
       console.error(error);
     }
     return result;
