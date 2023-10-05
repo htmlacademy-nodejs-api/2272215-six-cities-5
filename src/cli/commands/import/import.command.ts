@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { Command } from '../types/index.js';
-import { Offer, OfferType, Category, User } from '../../../shared/types/index.js';
-import { READ_FILE_ERROR, PARSE_FILE_ERROR } from './constants.js';
+import { READ_FILE_ERROR, PARSE_FILE_ERROR, Offer, OfferType, Category, User } from '../../../shared/types/index.js';
 
 export class ImportCommand implements Command {
   public getName(): string {

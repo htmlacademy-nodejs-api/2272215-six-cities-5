@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { PARSE_FILE_ERROR } from '../../../shared/types/index.js';
 import { Command } from '../types/index.js';
 import { VERSION_READ_ERROR } from './types.js';
 
@@ -32,7 +33,11 @@ export class VersionCommand implements Command {
         result = jsonContent.version;
       }
     } catch(error) {
-      console.error(error);
+      if(error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(PARSE_FILE_ERROR);
+      }
     }
     return result;
   }
