@@ -1,5 +1,6 @@
+import chalk from 'chalk';
 import { Command } from '../types/index.js';
-import { HELP_RETURN_VALUE } from './constants.js';
+import { COMMAND_TITLE, COMMAND_DESCRIPTION } from './constants.js';
 
 export class HelpCommand implements Command {
   public getName() {
@@ -7,6 +8,7 @@ export class HelpCommand implements Command {
   }
 
   public execute(..._args: string[]): void {
-    console.info(HELP_RETURN_VALUE);
+    console.info(chalk.yellow(COMMAND_TITLE));
+    console.info(COMMAND_DESCRIPTION);
   }
 }

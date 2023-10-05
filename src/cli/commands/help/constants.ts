@@ -1,6 +1,5 @@
-export const HELP_RETURN_VALUE = `
-  Программа для подготовки данных для REST API сервера.
-
+export const COMMAND_TITLE = 'Программа для подготовки данных для REST API сервера.';
+export const COMMAND_DESCRIPTION = `
   Пример: cli/main.js --<command> [--arguments]
 
   Команды:

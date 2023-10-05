@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import chalk from 'chalk';
 import { Command } from '../types/index.js';
 import { READ_FILE_ERROR, PARSE_FILE_ERROR, Offer, OfferType, Category, User } from '../../../shared/types/index.js';
 
@@ -14,7 +15,7 @@ export class ImportCommand implements Command {
 
     if(fileContent) {
       const offers: Offer[] = this.getOffers(fileContent);
-      console.log('OFFERS:');
+      console.log(chalk.yellow('OFFERS:'));
       console.log(offers);
     }
   }
@@ -24,9 +25,9 @@ export class ImportCommand implements Command {
       return readFileSync(filePath, 'utf-8');
     } catch(error) {
       if(error instanceof Error) {
-        throw new Error(error.message);
+        throw new Error(chalk.red(error.message));
       } else {
-        throw new Error(READ_FILE_ERROR);
+        throw new Error(chalk.red(READ_FILE_ERROR));
       }
     }
   }

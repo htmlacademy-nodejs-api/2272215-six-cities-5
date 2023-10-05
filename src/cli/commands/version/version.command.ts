@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import chalk from 'chalk';
 import { PARSE_FILE_ERROR } from '../../../shared/types/index.js';
 import { Command } from '../types/index.js';
 import { VERSION_READ_ERROR } from './types.js';
@@ -16,7 +17,7 @@ export class VersionCommand implements Command {
     const version = this.gerVersion();
 
     if(version) {
-      console.info(`Version: ${version}`);
+      console.info(`${chalk.blue('Version:')} ${version}`);
     } else {
       console.error(VERSION_READ_ERROR);
     }
@@ -34,9 +35,9 @@ export class VersionCommand implements Command {
       }
     } catch(error) {
       if(error instanceof Error) {
-        throw new Error(error.message);
+        throw new Error(chalk.red(error.message));
       } else {
-        throw new Error(PARSE_FILE_ERROR);
+        throw new Error(chalk.red(PARSE_FILE_ERROR));
       }
     }
     return result;
