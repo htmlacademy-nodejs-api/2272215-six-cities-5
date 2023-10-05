@@ -6,8 +6,7 @@ export class HelpCommand implements Command {
     return '--help';
   }
 
-  public execute(...args: string[]): void {
-    console.log('Help, execute, args=', args);
+  public execute(..._args: string[]): void {
     console.info(HELP_RETURN_VALUE);
   }
 }

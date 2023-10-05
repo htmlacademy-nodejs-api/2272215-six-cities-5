@@ -1,6 +1,6 @@
 import { CommandCollection } from './types.js';
 import { NO_COMMAND, COMMAND_EXECUTION_ERROR } from './constants.js';
-import { Command, HelpCommand } from '../commands/index.js';
+import { Command, HelpCommand, VersionCommand } from '../commands/index.js';
 
 
 export class CLIApplication {
@@ -13,7 +13,8 @@ export class CLIApplication {
 
   private registerCommands(): void {
     const commandList: Command[] = [
-      new HelpCommand()
+      new HelpCommand(),
+      new VersionCommand(),
     ];
 
     commandList.forEach((command) => {
