@@ -16,6 +16,7 @@
     "clean": "rimraf dist",
     "ts": "ts-node",
     "cli": "ts-node ./src/cli/main.ts",
+    "cli.js": "npm run compile && node ./dist/cli/main.js",
     "mock.server": "json-server ./mocks/mock-server-data.json --port 3333"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "json-server": "0.17.4",
     "rimraf": "5.0.1",
     "ts-node": "10.9.1",
+    "tslib": "2.6.2",
     "typescript": "5.2.2"
   },
   "type": "module",
