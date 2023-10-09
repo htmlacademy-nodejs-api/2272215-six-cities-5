@@ -14,7 +14,11 @@
     "lint": "eslint src/ --ext .ts",
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
-    "ts": "ts-node"
+    "ts": "ts-node",
+    "cli": "tsc -p tsconfig.json && node ./dist/cli/main.js"
+  },
+  "dependencies": {
+    "chalk": "5.3.0"
   },
   "devDependencies": {
     "@types/node": "18.17.17",
