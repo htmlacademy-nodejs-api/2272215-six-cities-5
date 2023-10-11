@@ -7,7 +7,7 @@ import { RestApplication } from './rest/index.js';
 function bootstrap() {
   const container = new Container();
   container.bind<RestApplication>(Component.RestApplication).to(RestApplication).inSingletonScope();
-  container.bind<ILogger>(Component.Logger).to(PinoLogger);
+  container.bind<ILogger>(Component.Logger).to(PinoLogger).inSingletonScope();
   container.bind<IConfig<RestSchema>>(Component.Config).to(RestConfig).inSingletonScope();
 
   const app = container.get<RestApplication>(Component.RestApplication);

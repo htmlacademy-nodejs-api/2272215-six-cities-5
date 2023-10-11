@@ -11,6 +11,7 @@ export class RestApplication {
 
   public init () {
     this.logger.info('Application initialized');
+    this.logger.info(`$PORT: ${this.config.get('PORT')}`);
     // this.logger.debug('Application Debug');
     // this.logger.warn('Application Warn');
     // this.logger.error('Application Error', new Error('My New Error'));

@@ -1,5 +1,7 @@
 import { config } from 'dotenv';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
+import { Component } from '../../types/index.js';
+import { ILogger } from '../logger/index.js';
 import { IConfig } from './config.interface.js';
 import { RestSchema, validateRestSchema } from './rest.schema.js';
 
@@ -8,6 +10,7 @@ export class RestConfig implements IConfig<RestSchema> {
   private readonly config: RestSchema;
 
   constructor(
+    @inject(Component.Logger) private readonly logger: ILogger
   ) {
     const parsedConfig = config();
 
@@ -16,10 +19,10 @@ export class RestConfig implements IConfig<RestSchema> {
     }
 
     validateRestSchema.load({});
-    validateRestSchema.validate({ allowed: 'strict', output: console.info });
+    validateRestSchema.validate({ allowed: 'strict', output: this.logger.info });
 
     this.config = validateRestSchema.getProperties();
-    console.info('this.config=', this.config);
+    this.logger.info('.env file successfully parsed!');
   }
 
   public get<T extends keyof RestSchema>(key: T): RestSchema[T] {
