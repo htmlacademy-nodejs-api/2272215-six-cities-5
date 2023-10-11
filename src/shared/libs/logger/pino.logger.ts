@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 import {injectable } from 'inversify';
 import { Logger as TPinoLogger, pino } from 'pino';
 import { ILogger } from './logger.interfaces.js';
@@ -7,7 +9,16 @@ export class PinoLogger implements ILogger {
   private readonly logger: TPinoLogger;
 
   constructor() {
-    this.logger = pino();
+    const modulePath = this.getCurrentModuleDirectoryPath();
+    const logFilePath = 'logs/app.log';
+    const destination = resolve(modulePath, '../../../../', logFilePath);
+
+    const transport = pino.transport({
+      target: 'pino/file',
+      options: { destination },
+    });
+
+    this.logger = pino({}, transport);
   }
 
   public info(message: string, ...args: unknown[]): void {
@@ -24,5 +35,10 @@ export class PinoLogger implements ILogger {
 
   public error(message: string, error: Error, ...args: unknown[]): void {
     this.logger.error(error, message, ...args);
+  }
+
+  private getCurrentModuleDirectoryPath(): string {
+    const filePath = fileURLToPath(import.meta.url);
+    return dirname(filePath);
   }
 }
