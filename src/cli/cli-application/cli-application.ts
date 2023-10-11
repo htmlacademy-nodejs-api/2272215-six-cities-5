@@ -1,6 +1,6 @@
 import { CommandCollection } from './types.js';
 import { NO_COMMAND } from './constants.js';
-import { Command, HelpCommand, VersionCommand, ImportCommand } from '../commands/index.js';
+import { Command, HelpCommand, VersionCommand, ImportCommand, GenerateCommand } from '../commands/index.js';
 
 
 export class CLIApplication {
@@ -16,6 +16,7 @@ export class CLIApplication {
       new HelpCommand(),
       new VersionCommand(),
       new ImportCommand(),
+      new GenerateCommand(),
     ];
 
     commandList.forEach((command) => {
