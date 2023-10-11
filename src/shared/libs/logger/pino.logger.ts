@@ -13,12 +13,22 @@ export class PinoLogger implements ILogger {
     const logFilePath = 'logs/app.log';
     const destination = resolve(modulePath, '../../../../', logFilePath);
 
-    const transport = pino.transport({
-      target: 'pino/file',
-      options: { destination },
+    const transports = pino.transport({
+      targets: [
+        {
+          target: 'pino/file',
+          level: 'debug',
+          options: { destination },
+        },
+        {
+          target: 'pino/file',
+          level: 'info',
+          options: {}
+        }
+      ]
     });
 
-    this.logger = pino({}, transport);
+    this.logger = pino({}, transports);
   }
 
   public info(message: string, ...args: unknown[]): void {
