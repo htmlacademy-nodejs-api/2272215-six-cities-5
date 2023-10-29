@@ -29,6 +29,9 @@ export class RestApplication {
       this.config.get('DB_PORT'),
       this.config.get('DB_NAME'),
     );
+
+    this.logger.info('Trying to connect to Database...');
     await this.database.connect(connString);
+    this.logger.info('Database connection established successfully');
   }
 }
