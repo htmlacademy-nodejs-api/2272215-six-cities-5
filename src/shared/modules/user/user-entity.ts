@@ -9,9 +9,9 @@ import { createSHA256 } from '../../utils/index.js';
   }
 })
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  _id: Types.ObjectId;
+  public _id: Types.ObjectId;
 
-  id: string;
+  public id: string;
 
   @prop({ unique: true, required: true })
   public email: string;
