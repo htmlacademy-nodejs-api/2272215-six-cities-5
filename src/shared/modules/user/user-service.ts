@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { Component } from '../../types/index.js';
@@ -24,8 +23,8 @@ export class UserService implements IUserService {
     return newUser;
   }
 
-  public async findById(_id: Types.ObjectId): Promise<DocumentType<UserEntity> | null> {
-    const foundUser = await this.userModel.findById(_id);
+  public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
+    const foundUser = await this.userModel.findById(id);
     return foundUser;
   }
 

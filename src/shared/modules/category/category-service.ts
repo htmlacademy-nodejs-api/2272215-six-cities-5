@@ -6,7 +6,6 @@ import { Component } from '../../types/index.js';
 import { CategoryEntity } from './category-entity.js';
 import { CreateCategoryDto } from './category-dto.js';
 import { ICategoryService } from './types.js';
-import { Types } from 'mongoose';
 
 @injectable()
 export class CategoryService implements ICategoryService{
@@ -21,8 +20,8 @@ export class CategoryService implements ICategoryService{
     return newCategory;
   }
 
-  public async findById(_id: Types.ObjectId): Promise<DocumentType<CategoryEntity> | null> {
-    return this.categoryModel.findById(_id).exec();
+  public async findById(id: string): Promise<DocumentType<CategoryEntity> | null> {
+    return this.categoryModel.findById(id).exec();
   }
 
   public async findByName(name: string): Promise<DocumentType<CategoryEntity> | null> {
