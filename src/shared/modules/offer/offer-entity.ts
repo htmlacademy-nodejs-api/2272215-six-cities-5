@@ -1,9 +1,14 @@
 import { Types } from 'mongoose';
-import { prop, defaultClasses, Ref } from '@typegoose/typegoose';
+import { prop, defaultClasses, Ref, modelOptions } from '@typegoose/typegoose';
 import { OfferType } from '../../types/index.js';
 import { CategoryEntity } from '../category/index.js';
 import { UserEntity } from '../user/index.js';
 
+@modelOptions({
+  schemaOptions: {
+    collection: 'offers'
+  }
+})
 export class OfferEntity extends defaultClasses.TimeStamps {
   public _id: Types.ObjectId;
 
