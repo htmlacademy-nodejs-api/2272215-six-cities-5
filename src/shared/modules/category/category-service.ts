@@ -27,4 +27,13 @@ export class CategoryService implements ICategoryService{
   public async findByName(name: string): Promise<DocumentType<CategoryEntity> | null> {
     return this.categoryModel.findOne({ name }).exec();
   }
+
+  public async findByNameOrCreate(name: string, dto: CreateCategoryDto): Promise<DocumentType<CategoryEntity>> {
+    const foundCategory = await this.findByName(name);
+    if(foundCategory) {
+      return foundCategory;
+    }
+
+    return await this.create(dto);
+  }
 }

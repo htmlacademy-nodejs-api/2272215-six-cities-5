@@ -32,4 +32,15 @@ export class UserService implements IUserService {
     const foundUser = await this.userModel.findOne({ email });
     return foundUser;
   }
+
+  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+    const foundUser = await this.findByEmail(dto.email);
+
+    if(foundUser) {
+      return foundUser;
+    }
+
+    const newUser = await this.create(dto, salt);
+    return newUser;
+  }
 }

@@ -6,4 +6,5 @@ export interface ICategoryService {
   create(dto: CreateCategoryDto): Promise<DocumentType<CategoryEntity>>;
   findById(id: string): Promise<DocumentType<CategoryEntity> | null>;
   findByName(name: string): Promise<DocumentType<CategoryEntity> | null>;
+  findByNameOrCreate(name: string, dto: CreateCategoryDto): Promise<DocumentType<CategoryEntity>>;
 }
