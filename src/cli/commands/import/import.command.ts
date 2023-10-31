@@ -1,22 +1,41 @@
 import chalk from 'chalk';
 import { READ_FILE_ERROR, Offer, OfferType, Category, User } from '../../../shared/types/index.js';
-import { FileReader } from '../../../shared/libs/index.js';
-import { getErrorMessage } from '../../../shared/utils/index.js';
+import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
+import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto, CreateCategoryDto } from '../../../shared/modules/index.js';
+import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
+import { DB_USER_PASSWORD } from './constants.js';
 
 export class ImportCommand implements Command {
+  private logger: ILogger;
+  private databaseClient: IDatabaseClient;
+  private userService: UserService;
+  private categoryService: CategoryService;
+  private offerService: OfferService;
+  private salt: string;
+
   constructor() {
     this.handleFileReaderLine = this.handleFileReaderLine.bind(this);
     this.handleFileReaderEnd = this.handleFileReaderEnd.bind(this);
+
+    this.logger = new ConsoleLogger();
+    this.databaseClient = new MongoDatabaseClient(this.logger);
+    this.userService = new UserService(userModel, this.logger);
+    this.categoryService = new CategoryService(categoryModel, this.logger);
+    this.offerService = new OfferService(offerModel, this.logger);
   }
 
   public getName(): string {
     return '--import';
   }
 
-  public execute(...args: string[]): void {
-    const [ mockFilePath ] = args;
-    this.read(mockFilePath.trim());
+  public async execute(mockFilePath: string, login: string, password: string, host: string, port: string, dbname: string, salt: string): Promise<void> {
+    const connString = getMongoURI(login, password, host, port, dbname);
+    this.salt = salt;
+
+    await this.databaseClient.connect(connString);
+
+    await this.read(mockFilePath.trim());
   }
 
   private async read(filePath: string): Promise<string | void> {
@@ -27,7 +46,8 @@ export class ImportCommand implements Command {
     try {
       await fileReader.read();
     } catch (error) {
-      throw new Error(getErrorMessage(error, READ_FILE_ERROR));
+      console.error(`Failed to import data from file: ${filePath}`);
+      console.error(getErrorMessage(error, READ_FILE_ERROR));
     }
   }
 
@@ -50,12 +70,44 @@ export class ImportCommand implements Command {
     };
   }
 
-  private handleFileReaderLine(line: string) {
-    const offer = this.getOffer(line);
-    console.info(offer);
+  private async saveOffer(offer: Offer): Promise<void> {
+    const categories: string[] = [];
+
+    const user = await this.userService.findOrCreate({...offer.user, password: DB_USER_PASSWORD}, this.salt);
+
+    for (const category of offer.categories) {
+      const { name: categoryName } = category;
+      const categoryDto: CreateCategoryDto = { name: categoryName };
+      const categoryDocument = await this.categoryService.findByNameOrCreate(categoryName, categoryDto);
+
+      if(!categories.includes(categoryDocument.id)) {
+        categories.push(categoryDocument.id);
+      }
+    }
+
+    const offerDto: CreateOfferDto = {
+      title: offer.title,
+      description: offer.description,
+      image: offer.image,
+      postDate: offer.postDate,
+      price: offer.price,
+      type: offer.type,
+      categories,
+      userId: user.id,
+    };
+
+    await this.offerService.create(offerDto);
   }
 
-  private handleFileReaderEnd(importedRowCount: string) {
+  private async handleFileReaderLine(line: string, resolve: () => void) {
+    const offer = this.getOffer(line);
+    await this.saveOffer(offer);
+    console.info(offer);
+    resolve();
+  }
+
+  private async handleFileReaderEnd(importedRowCount: string) {
     console.info(chalk.yellow(`Imported row count: ${importedRowCount}`));
+    this.databaseClient.disconnect();
   }
 }
