@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import {injectable } from 'inversify';
 import { Logger as TPinoLogger, pino } from 'pino';
-import { ILogger } from './logger.interfaces.js';
+import { ILogger } from '../types.js';
 
 @injectable()
 export class PinoLogger implements ILogger {
@@ -11,7 +11,7 @@ export class PinoLogger implements ILogger {
   constructor() {
     const modulePath = this.getCurrentModuleDirectoryPath();
     const logFilePath = 'logs/app.log';
-    const destination = resolve(modulePath, '../../../../', logFilePath);
+    const destination = resolve(modulePath, '../../../../../', logFilePath);
 
     const transports = pino.transport({
       targets: [

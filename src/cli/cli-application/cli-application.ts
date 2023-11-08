@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { CommandCollection } from './types.js';
 import { NO_COMMAND } from './constants.js';
 import { Command, HelpCommand, VersionCommand, ImportCommand, GenerateCommand } from '../commands/index.js';
@@ -34,11 +35,12 @@ export class CLIApplication {
     }
 
     const foundCommand = this.getCommandByName(inputCommandName);
+    const correctedCommandName = this.getCorrectedCommanName(inputCommandName);
 
     if(foundCommand) {
       foundCommand.execute(...inputCommandArgs);
-    } else if(this.isCommandWithoutPrefix(inputCommandName)) {
-      const error = `${NO_COMMAND}. Может Вы имели в виду --${inputCommandName}?`;
+    } else if(correctedCommandName) {
+      const error = `${chalk.yellow(NO_COMMAND)}. Может Вы имели в виду ${correctedCommandName}?`;
       console.info(error);
     } else {
       console.info(NO_COMMAND);
@@ -50,9 +52,20 @@ export class CLIApplication {
     return foundCommandName ? this.commands[foundCommandName] : null;
   }
 
-  private isCommandWithoutPrefix(commandName: string): boolean {
-    const prefixCommandName = `--${commandName}`;
-    const foundCommandName = Object.keys(this.commands).find((key) => key === prefixCommandName);
-    return !!foundCommandName;
+  private getCorrectedCommanName(commandName: string): string | null {
+    const correctCommandName = `--${commandName}`;
+    const correctCommandName2 = `-${commandName}`;
+
+    const foundCorrectCommandName = Object.keys(this.commands).reduce((acc: string | null, cmd) => {
+      if(!acc && cmd === correctCommandName) {
+        return correctCommandName;
+      } else if(!acc && cmd === correctCommandName2) {
+        return correctCommandName2;
+      } else {
+        return acc;
+      }
+    }, null);
+
+    return foundCorrectCommandName;
   }
 }

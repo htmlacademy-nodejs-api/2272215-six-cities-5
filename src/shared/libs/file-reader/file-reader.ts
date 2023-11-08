@@ -30,7 +30,9 @@ export class FileReader extends EventEmitter implements IFileReader {
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
 
-        this.emit('line', completeLine);
+        await new Promise((resolve) => {
+          this.emit('line', completeLine, resolve);
+        });
       }
     }
 
