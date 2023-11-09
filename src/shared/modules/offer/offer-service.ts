@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { ILogger } from '../../libs/index.js';
 import { Component } from '../../types/index.js';
-import { CreateOfferDto } from './offer-dto.js';
+import { CreateOfferDto, UpdateOfferDto } from './offer-dto.js';
 import { OfferEntity } from './offer-entity.js';
 import { IOfferService } from './types.js';
 
@@ -19,7 +19,18 @@ export class OfferService implements IOfferService {
     return newOffer;
   }
 
-  public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findById(id).exec();
+  public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findById(offerId).exec();
+  }
+
+  public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, dto, { new: true })
+      .populate('userId', 'categories')
+      .exec();
+  }
+
+  public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findByIdAndDelete(offerId).exec();
   }
 }
