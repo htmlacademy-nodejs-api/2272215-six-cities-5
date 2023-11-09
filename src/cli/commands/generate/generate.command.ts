@@ -7,6 +7,7 @@ import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY } from './constants.js';
 
 // npm run cli -- --generate 3 ./mocks/mock-data.tsv http://localhost:3333/api
+// npm run cli -- --generate 3 ./mocks/mock-data.tsv http://127.0.0.1:3333/api
 
 export class GenerateCommand implements Command {
   private serverData: MockServerData;
