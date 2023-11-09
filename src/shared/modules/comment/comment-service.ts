@@ -17,4 +17,13 @@ export class CommentService implements ICommentService {
     const newComment = await this.commentModel.create(dto);
     return newComment.populate('userId');
   }
+
+  public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
+    return this.commentModel.find({ offerId }).populate('userId');
+  }
+
+  public async deleteByOfferId(offerId: string): Promise<number> {
+    const result = await this.commentModel.deleteMany({offerId}).exec();
+    return result.deletedCount;
+  }
 }
