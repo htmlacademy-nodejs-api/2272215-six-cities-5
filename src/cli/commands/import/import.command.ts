@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, OfferType, Category, User } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, OfferType, Category, User, HousingType } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
 import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto, CreateCategoryDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
@@ -54,7 +54,7 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, createdDate, image, type, price, categories, firstName, lastName, email, avatarPath] = dataArray;
+    const [title, description, createdDate, image, type, housingType, price, categories, firstName, lastName, email, avatarPath] = dataArray;
     const arrayCategories: Category[] = categories.split(';').map((cat) => ({name: cat}));
     const user: User = { email, avatarPath, firstName, lastName};
 
@@ -64,10 +64,11 @@ export class ImportCommand implements Command {
       postDate: new Date(createdDate),
       image,
       type: type as OfferType,
+      housingType: housingType as HousingType,
       categories: arrayCategories,
       price: Number.parseInt(price, 10),
       user,
-    };
+    } as Offer;
   }
 
   private async saveOffer(offer: Offer): Promise<void> {
@@ -92,6 +93,7 @@ export class ImportCommand implements Command {
       postDate: offer.postDate,
       price: offer.price,
       type: offer.type,
+      housingType: offer.housingType,
       categories,
       userId: user.id,
     };

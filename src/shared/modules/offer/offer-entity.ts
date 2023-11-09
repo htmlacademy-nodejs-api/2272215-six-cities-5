@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { prop, defaultClasses, Ref, modelOptions } from '@typegoose/typegoose';
-import { OfferType } from '../../types/index.js';
+import { OfferType, HousingType } from '../../types/index.js';
 import { CategoryEntity } from '../category/index.js';
 import { UserEntity } from '../user/index.js';
 
@@ -34,6 +34,12 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     enum: OfferType
   })
   public type: OfferType;
+
+  @prop({
+    type: () => String,
+    enum: HousingType
+  })
+  public housingType: HousingType;
 
   @prop({
     required: true,

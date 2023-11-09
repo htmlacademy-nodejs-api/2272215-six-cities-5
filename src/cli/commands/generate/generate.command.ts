@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import got from 'got';
 import { FileWritter } from '../../../shared/libs/index.js';
-import { LOAD_DATA_ERROR, MockServerData, OfferType } from '../../../shared/types/index.js';
-import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber } from '../../../shared/utils/index.js';
+import { LOAD_DATA_ERROR, MockServerData, OfferType, HousingType } from '../../../shared/types/index.js';
+import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY } from './constants.js';
 
@@ -40,6 +40,9 @@ export class GenerateCommand implements Command {
   private generateLines(offerCount: number): string[] {
     const lines: string[] = [];
 
+    const housingTypeArray = getArrayFromEnum(HousingType);
+    const offerTypeArray = getArrayFromEnum(OfferType);
+
     if(!this.serverData) {
       return lines;
     }
@@ -49,7 +52,8 @@ export class GenerateCommand implements Command {
       const categories = getRandomItems(this.serverData.categories).join(';');
       const description = getRandomItem(this.serverData.descriptions);
       const photo = getRandomItem(this.serverData.offerImages);
-      const type = getRandomItem([OfferType.Buy, OfferType.Sell]);
+      const type = getRandomItem(offerTypeArray);
+      const housingType = getRandomItem(housingTypeArray);
       const price = getRandomNumber(MIN_PRICE, MAX_PRICE).toString();
       const author = getRandomItem(this.serverData.users);
       const email = getRandomItem(this.serverData.emails);
@@ -61,7 +65,7 @@ export class GenerateCommand implements Command {
       const [ firstName, lastName ] = author.split(' ');
 
       const line = [title, description, createdDate,
-        photo, type, price, categories,
+        photo, type, housingType, price, categories,
         firstName, lastName, email, avatar].join('\t');
 
       lines.push(line);
