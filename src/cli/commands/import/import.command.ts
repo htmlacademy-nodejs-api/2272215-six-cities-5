@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
-import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
+import { UserService, OfferService, userModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { DB_USER_PASSWORD } from './constants.js';
@@ -10,7 +10,6 @@ export class ImportCommand implements Command {
   private logger: ILogger;
   private databaseClient: IDatabaseClient;
   private userService: UserService;
-  private categoryService: CategoryService;
   private offerService: OfferService;
   private salt: string;
 
@@ -21,7 +20,6 @@ export class ImportCommand implements Command {
     this.logger = new ConsoleLogger();
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.userService = new UserService(userModel, this.logger);
-    this.categoryService = new CategoryService(categoryModel, this.logger);
     this.offerService = new OfferService(offerModel, this.logger);
   }
 

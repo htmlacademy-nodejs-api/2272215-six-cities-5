@@ -1,16 +1,5 @@
 {
   "api": {
-    "categories": [
-      "Кондиционер",
-      "Стиральная машина",
-      "Посудомойка",
-      "Мебель",
-      "Балкон",
-      "Лоджия",
-      "Метро",
-      "Ремонт",
-      "Лифт"
-    ],
     "titles": [
       "Продаю квартиру",
       "Продаю большую квартиру",
@@ -44,16 +33,6 @@
       "image-1.jpg",
       "image-2.jpg",
       "image-3.jpg"
-    ],
-    "categoryImages": [
-      "category-air-conditioner.jpg",
-      "category-washing-machine.jpg",
-      "category-dishwasher.jpg",
-      "category-renovation.jpg",
-      "category-furniture.jpg",
-      "category-balcony.jpg",
-      "category-loggia.jpg",
-      "category-elevator.jpg"
     ],
     "users": [
       "Марина Иванова",
