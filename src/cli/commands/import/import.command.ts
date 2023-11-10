@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, City } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
 import { UserService, OfferService, userModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
@@ -52,20 +52,23 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, createdDate, image, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
+    const [title, description, postDateString, city, previewImage, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
     const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
     const user: User = { email, avatarPath, firstName, lastName};
 
-    return {
+    const offer: Offer = {
       title,
       description,
-      postDate: new Date(createdDate),
-      image,
-      housingType: housingType as HousingType[keyof HousingType],
+      postDate: new Date(postDateString),
+      city: city as City,
+      previewImage,
+      housingType: housingType as HousingType,
       amenities: amenityTypes,
       price: Number.parseInt(price, 10),
       user,
-    } as Offer;
+    };
+
+    return offer;
   }
 
   private async saveOffer(offer: Offer): Promise<void> {
@@ -74,8 +77,9 @@ export class ImportCommand implements Command {
     const offerDto: CreateOfferDto = {
       title: offer.title,
       description: offer.description,
-      image: offer.image,
       postDate: offer.postDate,
+      city: offer.city,
+      previewImage: offer.previewImage,
       price: offer.price,
       housingType: offer.housingType,
       amenities: offer.amenities,

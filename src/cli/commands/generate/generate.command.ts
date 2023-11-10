@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import got from 'got';
 import { FileWritter } from '../../../shared/libs/index.js';
-import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType } from '../../../shared/types/index.js';
+import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, City } from '../../../shared/types/index.js';
 import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY } from './constants.js';
@@ -42,6 +42,7 @@ export class GenerateCommand implements Command {
 
     const housingValues = getValueArrayFromEnum(HousingType);
     const amenityValues = getValueArrayFromEnum(AmenityType);
+    const cityValues = getValueArrayFromEnum(City);
 
     if(!this.serverData) {
       return lines;
@@ -50,7 +51,8 @@ export class GenerateCommand implements Command {
     for(let i = 0; i < offerCount; i++) {
       const title = getRandomItem(this.serverData.titles);
       const description = getRandomItem(this.serverData.descriptions);
-      const photo = getRandomItem(this.serverData.offerImages);
+      const city = getRandomItem(cityValues);
+      const previewImage = getRandomItem(this.serverData.previewImages);
       const housingType = getRandomItem(housingValues);
       const price = getRandomNumber(MIN_PRICE, MAX_PRICE).toString();
       const amenities = getRandomItems(amenityValues).join(';');
@@ -58,13 +60,13 @@ export class GenerateCommand implements Command {
       const email = getRandomItem(this.serverData.emails);
       const avatar = getRandomItem(this.serverData.avatars);
 
-      const createdDate = dayjs()
+      const postDate = dayjs()
         .subtract(getRandomNumber(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
         .toISOString();
       const [ firstName, lastName ] = author.split(' ');
 
-      const line = [title, description, createdDate,
-        photo, housingType, price, amenities,
+      const line = [title, description, postDate, city,
+        previewImage, housingType, price, amenities,
         firstName, lastName, email, avatar].join('\t');
 
       lines.push(line);

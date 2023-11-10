@@ -1,10 +1,11 @@
-import { HousingType, AmenityType } from '../../types/index.js';
+import { HousingType, AmenityType, City } from '../../types/index.js';
 
 export class CreateOfferDto {
   public title: string;
   public description: string;
   public postDate: Date;
-  public image: string;
+  public city: City;
+  public previewImage: string;
   public housingType: HousingType;
   public price: number;
   public amenities: AmenityType[];
@@ -15,7 +16,8 @@ export class UpdateOfferDto {
   public title?: string;
   public description?: string;
   public postDate?: Date;
-  public image?: string;
+  public city?: City;
+  public previewImage?: string;
   public housingType?: HousingType;
   public price?: number;
   public amenities?: AmenityType[];
