@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import got from 'got';
 import { FileWritter } from '../../../shared/libs/index.js';
-import { LOAD_DATA_ERROR, MockServerData, OfferType, HousingType } from '../../../shared/types/index.js';
-import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getArrayFromEnum } from '../../../shared/utils/index.js';
+import { LOAD_DATA_ERROR, MockServerData, OfferType, HousingType, AmenityType } from '../../../shared/types/index.js';
+import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY } from './constants.js';
 
@@ -40,8 +40,9 @@ export class GenerateCommand implements Command {
   private generateLines(offerCount: number): string[] {
     const lines: string[] = [];
 
-    const housingTypeArray = getArrayFromEnum(HousingType);
-    const offerTypeArray = getArrayFromEnum(OfferType);
+    const offerValues = getValueArrayFromEnum(OfferType);
+    const housingValues = getValueArrayFromEnum(HousingType);
+    const amenityValues = getValueArrayFromEnum(AmenityType);
 
     if(!this.serverData) {
       return lines;
@@ -49,12 +50,12 @@ export class GenerateCommand implements Command {
 
     for(let i = 0; i < offerCount; i++) {
       const title = getRandomItem(this.serverData.titles);
-      const categories = getRandomItems(this.serverData.categories).join(';');
       const description = getRandomItem(this.serverData.descriptions);
       const photo = getRandomItem(this.serverData.offerImages);
-      const type = getRandomItem(offerTypeArray);
-      const housingType = getRandomItem(housingTypeArray);
+      const type = getRandomItem(offerValues);
+      const housingType = getRandomItem(housingValues);
       const price = getRandomNumber(MIN_PRICE, MAX_PRICE).toString();
+      const amenities = getRandomItems(amenityValues).join(';');
       const author = getRandomItem(this.serverData.users);
       const email = getRandomItem(this.serverData.emails);
       const avatar = getRandomItem(this.serverData.avatars);
@@ -65,7 +66,7 @@ export class GenerateCommand implements Command {
       const [ firstName, lastName ] = author.split(' ');
 
       const line = [title, description, createdDate,
-        photo, type, housingType, price, categories,
+        photo, type, housingType, price, amenities,
         firstName, lastName, email, avatar].join('\t');
 
       lines.push(line);

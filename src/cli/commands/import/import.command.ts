@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, OfferType, Category, User, HousingType } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, OfferType, User, HousingType, AmenityType } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
-import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto, CreateCategoryDto } from '../../../shared/modules/index.js';
+import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { DB_USER_PASSWORD } from './constants.js';
@@ -54,8 +54,8 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, createdDate, image, type, housingType, price, categories, firstName, lastName, email, avatarPath] = dataArray;
-    const arrayCategories: Category[] = categories.split(';').map((cat) => ({name: cat}));
+    const [title, description, createdDate, image, type, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
+    const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
     const user: User = { email, avatarPath, firstName, lastName};
 
     return {
@@ -63,28 +63,16 @@ export class ImportCommand implements Command {
       description,
       postDate: new Date(createdDate),
       image,
-      type: type as OfferType,
-      housingType: housingType as HousingType,
-      categories: arrayCategories,
+      type: type as OfferType[keyof OfferType],
+      housingType: housingType as HousingType[keyof HousingType],
+      amenities: amenityTypes,
       price: Number.parseInt(price, 10),
       user,
     } as Offer;
   }
 
   private async saveOffer(offer: Offer): Promise<void> {
-    const categories: string[] = [];
-
     const user = await this.userService.findOrCreate({...offer.user, password: DB_USER_PASSWORD}, this.salt);
-
-    for (const category of offer.categories) {
-      const { name: categoryName } = category;
-      const categoryDto: CreateCategoryDto = { name: categoryName };
-      const categoryDocument = await this.categoryService.findByNameOrCreate(categoryName, categoryDto);
-
-      if(!categories.includes(categoryDocument.id)) {
-        categories.push(categoryDocument.id);
-      }
-    }
 
     const offerDto: CreateOfferDto = {
       title: offer.title,
@@ -94,7 +82,7 @@ export class ImportCommand implements Command {
       price: offer.price,
       type: offer.type,
       housingType: offer.housingType,
-      categories,
+      amenities: offer.amenities,
       userId: user.id,
     };
 

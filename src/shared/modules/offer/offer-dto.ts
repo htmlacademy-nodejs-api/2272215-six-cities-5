@@ -1,4 +1,4 @@
-import { OfferType, HousingType } from '../../types/index.js';
+import { OfferType, HousingType, AmenityType } from '../../types/index.js';
 
 export class CreateOfferDto {
   public title: string;
@@ -8,7 +8,7 @@ export class CreateOfferDto {
   public type: OfferType;
   public housingType: HousingType;
   public price: number;
-  public categories: string[];
+  public amenities: AmenityType[];
   public userId: string;
 }
 
@@ -18,7 +18,8 @@ export class UpdateOfferDto {
   public postDate?: Date;
   public image?: string;
   public type?: OfferType;
+  public housingType?: HousingType;
   public price?: number;
-  public categories?: string[];
+  public amenities?: AmenityType[];
   public userId?: string;
 }

@@ -1,4 +1,4 @@
-import { Category, User } from './index.js';
+import { User } from './index.js';
 
 export enum OfferType {
   Buy = 'Buy',
@@ -12,6 +12,16 @@ export enum HousingType {
   Hotel = 'hotel',
 }
 
+export enum AmenityType {
+  Breakfast = 'Breakfast',
+  AirConditioning = 'Air conditioning',
+  LaptopFriendlyWorkspace = 'Laptop friendly workspace',
+  BabySeat = 'Baby seat',
+  Washer = 'Washer',
+  Towels = 'Towels',
+  Fridge = 'Fridge',
+}
+
 export type Offer = {
   title: string;
   description: string;
@@ -20,6 +30,6 @@ export type Offer = {
   type: OfferType;
   housingType: HousingType;
   price: number;
-  categories: Category[];
+  amenities: AmenityType[];
   user: User;
 }
