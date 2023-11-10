@@ -1,10 +1,5 @@
 import { User } from './index.js';
 
-export enum OfferType {
-  Buy = 'Buy',
-  Sell = 'Sell',
-}
-
 export enum HousingType {
   Apartment = 'apartment',
   House = 'house',
@@ -27,7 +22,6 @@ export type Offer = {
   description: string;
   postDate: Date;
   image: string;
-  type: OfferType;
   housingType: HousingType;
   price: number;
   amenities: AmenityType[];

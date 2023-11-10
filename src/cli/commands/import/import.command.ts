@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, OfferType, User, HousingType, AmenityType } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
 import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
@@ -54,7 +54,7 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, createdDate, image, type, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
+    const [title, description, createdDate, image, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
     const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
     const user: User = { email, avatarPath, firstName, lastName};
 
@@ -63,7 +63,6 @@ export class ImportCommand implements Command {
       description,
       postDate: new Date(createdDate),
       image,
-      type: type as OfferType[keyof OfferType],
       housingType: housingType as HousingType[keyof HousingType],
       amenities: amenityTypes,
       price: Number.parseInt(price, 10),
@@ -80,7 +79,6 @@ export class ImportCommand implements Command {
       image: offer.image,
       postDate: offer.postDate,
       price: offer.price,
-      type: offer.type,
       housingType: offer.housingType,
       amenities: offer.amenities,
       userId: user.id,
