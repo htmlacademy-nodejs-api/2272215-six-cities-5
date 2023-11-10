@@ -25,7 +25,11 @@ export type Offer = {
   city: City,
   previewImage: string;
   housingPhotos: string[],
+  isPremium: boolean,
+  rating: number,
   housingType: HousingType;
+  roomCount: number,
+  guestCount: number,
   price: number;
   amenities: AmenityType[];
   user: User;

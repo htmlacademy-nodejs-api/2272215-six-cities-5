@@ -4,7 +4,8 @@ import { FileWritter } from '../../../shared/libs/index.js';
 import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, City } from '../../../shared/types/index.js';
 import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
-import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY, HOUSING_PHOTO_COUNT } from './constants.js';
+import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY, HOUSING_PHOTO_COUNT, MIN_RATING, MAX_RATING,
+  MIN_ROOM_COUNT, MAX_ROOM_COUNT, MIN_GUEST_COUNT, MAX_GUEST_COUNT } from './constants.js';
 
 // npm run cli -- --generate 3 ./mocks/mock-data.tsv http://localhost:3333/api
 // npm run cli -- --generate 3 ./mocks/mock-data.tsv http://127.0.0.1:3333/api
@@ -54,7 +55,11 @@ export class GenerateCommand implements Command {
       const city = getRandomItem(cityValues);
       const previewImage = getRandomItem(this.serverData.previewImages);
       const housingPhotos = getRandomItems(this.serverData.housingPhotos, HOUSING_PHOTO_COUNT).join(';');
+      const isPremium = getRandomItem([true, false]).toString();
+      const rating = getRandomNumber(MIN_RATING, MAX_RATING).toString();
       const housingType = getRandomItem(housingValues);
+      const roomCount = getRandomNumber(MIN_ROOM_COUNT, MAX_ROOM_COUNT).toString();
+      const guestCount = getRandomNumber(MIN_GUEST_COUNT, MAX_GUEST_COUNT).toString();
       const price = getRandomNumber(MIN_PRICE, MAX_PRICE).toString();
       const amenities = getRandomItems(amenityValues).join(';');
       const author = getRandomItem(this.serverData.users);
@@ -67,7 +72,7 @@ export class GenerateCommand implements Command {
       const [ firstName, lastName ] = author.split(' ');
 
       const line = [title, description, postDate, city,
-        previewImage, housingPhotos, housingType, price, amenities,
+        previewImage, housingPhotos, isPremium, rating, housingType, roomCount, guestCount, price, amenities,
         firstName, lastName, email, avatar].join('\t');
 
       lines.push(line);

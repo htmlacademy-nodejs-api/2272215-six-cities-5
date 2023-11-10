@@ -32,11 +32,17 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public previewImage: string;
 
-  @prop({ required: true })
+  @prop({
+    required: true,
+    type: () => String,
+  })
   public housingPhotos: string[];
 
-  @prop()
-  public price: number;
+  @prop({ required: true })
+  public isPremium: boolean;
+
+  @prop({ required: true })
+  public rating: number;
 
   @prop({
     required: true,
@@ -44,6 +50,15 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     enum: HousingType,
   })
   public housingType: HousingType;
+
+  @prop({ required: true })
+  public roomCount: number;
+
+  @prop({ required: true })
+  public guestCount: number;
+
+  @prop()
+  public price: number;
 
   @prop({
     required: true,
