@@ -52,8 +52,9 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, postDateString, city, previewImage, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
+    const [title, description, postDateString, city, previewImage, housingPhotosString, housingType, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
     const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
+    const housingPhotos = housingPhotosString.split(';').map((photo) => photo);
     const user: User = { email, avatarPath, firstName, lastName};
 
     const offer: Offer = {
@@ -62,6 +63,7 @@ export class ImportCommand implements Command {
       postDate: new Date(postDateString),
       city: city as City,
       previewImage,
+      housingPhotos,
       housingType: housingType as HousingType,
       amenities: amenityTypes,
       price: Number.parseInt(price, 10),
@@ -80,6 +82,7 @@ export class ImportCommand implements Command {
       postDate: offer.postDate,
       city: offer.city,
       previewImage: offer.previewImage,
+      housingPhotos: offer.housingPhotos,
       price: offer.price,
       housingType: offer.housingType,
       amenities: offer.amenities,

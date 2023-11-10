@@ -4,7 +4,7 @@ import { FileWritter } from '../../../shared/libs/index.js';
 import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, City } from '../../../shared/types/index.js';
 import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
-import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY } from './constants.js';
+import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY, HOUSING_PHOTO_COUNT } from './constants.js';
 
 // npm run cli -- --generate 3 ./mocks/mock-data.tsv http://localhost:3333/api
 // npm run cli -- --generate 3 ./mocks/mock-data.tsv http://127.0.0.1:3333/api
@@ -53,6 +53,7 @@ export class GenerateCommand implements Command {
       const description = getRandomItem(this.serverData.descriptions);
       const city = getRandomItem(cityValues);
       const previewImage = getRandomItem(this.serverData.previewImages);
+      const housingPhotos = getRandomItems(this.serverData.housingPhotos, HOUSING_PHOTO_COUNT).join(';');
       const housingType = getRandomItem(housingValues);
       const price = getRandomNumber(MIN_PRICE, MAX_PRICE).toString();
       const amenities = getRandomItems(amenityValues).join(';');
@@ -66,7 +67,7 @@ export class GenerateCommand implements Command {
       const [ firstName, lastName ] = author.split(' ');
 
       const line = [title, description, postDate, city,
-        previewImage, housingType, price, amenities,
+        previewImage, housingPhotos, housingType, price, amenities,
         firstName, lastName, email, avatar].join('\t');
 
       lines.push(line);

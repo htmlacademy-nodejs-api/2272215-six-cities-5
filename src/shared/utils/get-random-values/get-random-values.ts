@@ -26,7 +26,13 @@ export function getRandomItem<T>(items: T[]): T {
   return items[randomNumer];
 }
 
-export function getRandomItems<T>(items: T[]): T[] {
+/**
+ * Функция генерирует {generateCount} случайных уникальных чисел в диапазоне от 0..{items.length}
+ * @param {Array<T>} items Массив элементов
+ * @param {Number} generateCount Число элементов, которое необходимо сгенерировать
+ * @return {Array<T>} Массив случайных уникальных элементов
+*/
+export function getRandomItems<T>(items: T[], generateCount?: number): T[] {
   if(items.length === 0) {
     return [];
   }
@@ -35,7 +41,14 @@ export function getRandomItems<T>(items: T[]): T[] {
     return items;
   }
 
-  const randomCount = getRandomNumber(1, items.length);
+  let _generateCount;
+
+  if(generateCount && generateCount <= items.length) {
+    _generateCount = generateCount;
+  }
+
+  const randomCount = _generateCount ?? getRandomNumber(1, items.length);
+
   const randomUniqueNumbers = generateRandomUniqueNumbers(randomCount, 0, items.length - 1);
   return randomUniqueNumbers.map((number) => items[number]);
 }

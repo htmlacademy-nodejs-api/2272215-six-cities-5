@@ -6,6 +6,7 @@ export class CreateOfferDto {
   public postDate: Date;
   public city: City;
   public previewImage: string;
+  public housingPhotos: string[];
   public housingType: HousingType;
   public price: number;
   public amenities: AmenityType[];
@@ -18,6 +19,7 @@ export class UpdateOfferDto {
   public postDate?: Date;
   public city?: City;
   public previewImage?: string;
+  public housingPhotos?: string[];
   public housingType?: HousingType;
   public price?: number;
   public amenities?: AmenityType[];

@@ -16,10 +16,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, trim: true })
   public title: string;
 
-  @prop({ trim: true })
+  @prop({ required: true, trim: true })
   public description: string;
 
-  @prop()
+  @prop({ required: true })
   public postDate: Date;
 
   @prop({
@@ -29,8 +29,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public city: City;
 
-  @prop()
+  @prop({ required: true })
   public previewImage: string;
+
+  @prop({ required: true })
+  public housingPhotos: string[];
 
   @prop()
   public price: number;

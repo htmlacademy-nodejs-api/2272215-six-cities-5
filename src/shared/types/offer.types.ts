@@ -24,6 +24,7 @@ export type Offer = {
   postDate: Date;
   city: City,
   previewImage: string;
+  housingPhotos: string[],
   housingType: HousingType;
   price: number;
   amenities: AmenityType[];

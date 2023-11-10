@@ -23,16 +23,28 @@
       "Хорошая инфраструктура, много магазинов и кафе",
       "Метро в пешей доступности"
     ],
-    "previewImages": [
-      "flat-1.jpg",
-      "flat-2.jpg",
-      "flat-3.jpg",
-      "pic-1.jpg",
-      "pic-2.jpg",
-      "pic-3.jpg",
+    "previewImages": [ 
       "image-1.jpg",
       "image-2.jpg",
-      "image-3.jpg"
+      "image-3.jpg",
+      "image-4.jpg",
+      "image-5.jpg",
+      "image-6.jpg",
+      "image-7.jpg",
+      "image-8.jpg",
+      "image-9.jpg"
+    ],
+    "housingPhotos": [
+      "photo-1",
+      "photo-2",
+      "photo-3",
+      "photo-4",
+      "photo-5",
+      "photo-6",
+      "photo-7",
+      "photo-8",
+      "photo-9",
+      "photo-10"
     ],
     "users": [
       "Марина Иванова",
