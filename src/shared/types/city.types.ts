@@ -1,4 +1,4 @@
-export enum City {
+export enum CityName {
   Paris = 'Paris',
   Cologne = 'Cologne',
   Brussels = 'Brussels',
@@ -13,31 +13,31 @@ export type Geo = {
 };
 
 export type CityGeo = {
-  [key in City]: Geo;
+  [key in CityName]: Geo;
 };
 
 export const cityGeos: CityGeo = {
-  [City.Paris]: {
+  [CityName.Paris]: {
     latitude: 48.85661,
     longitude: 2.351499,
   },
-  [City.Cologne]: {
+  [CityName.Cologne]: {
     latitude: 50.938361,
     longitude: 6.959974,
   },
-  [City.Brussels]: {
+  [CityName.Brussels]: {
     latitude: 50.846557,
     longitude: 4.351697,
   },
-  [City.Amsterdam]: {
+  [CityName.Amsterdam]: {
     latitude: 52.370216,
     longitude: 4.895168,
   },
-  [City.Hamburg]: {
+  [CityName.Hamburg]: {
     latitude: 53.550341,
     longitude: 10.000654,
   },
-  [City.Dusseldorf]: {
+  [CityName.Dusseldorf]: {
     latitude: 51.225402,
     longitude: 6.776314,
   },

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import got from 'got';
 import { FileWritter } from '../../../shared/libs/index.js';
-import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, City } from '../../../shared/types/index.js';
+import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, CityName } from '../../../shared/types/index.js';
 import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY, HOUSING_PHOTO_COUNT, MIN_RATING, MAX_RATING,
@@ -43,7 +43,7 @@ export class GenerateCommand implements Command {
 
     const housingValues = getValueArrayFromEnum(HousingType);
     const amenityValues = getValueArrayFromEnum(AmenityType);
-    const cityValues = getValueArrayFromEnum(City);
+    const cityValues = getValueArrayFromEnum(CityName);
 
     if(!this.serverData) {
       return lines;

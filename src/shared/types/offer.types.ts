@@ -1,4 +1,4 @@
-import { City } from './city.types.js';
+import { CityName } from './city.types.js';
 import { User } from './index.js';
 
 export enum HousingType {
@@ -22,7 +22,7 @@ export type Offer = {
   title: string;
   description: string;
   postDate: Date;
-  city: City,
+  city: CityName,
   previewImage: string;
   housingPhotos: string[],
   isPremium: boolean,

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, City } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, CityName } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
 import { UserService, OfferService, userModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
@@ -62,7 +62,7 @@ export class ImportCommand implements Command {
       title,
       description,
       postDate: new Date(postDateString),
-      city: city as City,
+      city: city as CityName,
       previewImage,
       housingPhotos,
       isPremium: Boolean(isPremium),
