@@ -4,4 +4,4 @@ export * from './mock-server-data.types.js';
 export * from './offer.types.js';
 export * from './user.types.js';
 export * from './sort.types.js';
-export * from './city.types.js';
+export * from './geo.types.js';

@@ -1,4 +1,4 @@
-import { CityName } from './city.types.js';
+import { CityName } from './geo.types.js';
 import { User } from './index.js';
 
 export enum HousingType {

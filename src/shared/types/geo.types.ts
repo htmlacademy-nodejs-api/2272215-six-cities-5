@@ -1,3 +1,13 @@
+export type Geo = {
+  latitude: number;
+  longitude: number;
+};
+
+export type GeoLocation = {
+  city: string,
+  geo: Geo,
+}
+
 export enum CityName {
   Paris = 'Paris',
   Cologne = 'Cologne',
@@ -7,16 +17,11 @@ export enum CityName {
   Dusseldorf = 'Dusseldorf',
 }
 
-export type Geo = {
-  latitude: number;
-  longitude: number;
-};
-
-export type CityGeo = {
+export type GeoLocationDataType = {
   [key in CityName]: Geo;
 };
 
-export const cityGeos: CityGeo = {
+export const geoLocationData: GeoLocationDataType = {
   [CityName.Paris]: {
     latitude: 48.85661,
     longitude: 2.351499,
