@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { prop, defaultClasses, Ref, modelOptions } from '@typegoose/typegoose';
-import { HousingType, AmenityType, CityName } from '../../types/index.js';
+import { HousingType, AmenityType } from '../../types/index.js';
+import { GeoLocation } from '../geo-location/index.js';
 import { UserEntity } from '../user/index.js';
 
 @modelOptions({
@@ -24,10 +25,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({
     required: true,
-    type: () => String,
-    enum: CityName,
+    _id: false,
+    type: () => GeoLocation
   })
-  public city: CityName;
+  public geoLocation: GeoLocation;
 
   @prop({ required: true })
   public previewImage: string;

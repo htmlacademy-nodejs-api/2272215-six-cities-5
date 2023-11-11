@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, CityName } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, IGeoLocation } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
 import { UserService, OfferService, userModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
@@ -52,17 +52,24 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, postDateString, city, previewImage, housingPhotosString, isPremium, rating,
-      housingType, roomCount, guestCount, price, amenities, firstName, lastName, email, avatarPath] = dataArray;
+    const [title, description, postDateString, city, previewImage, housingPhotosString, isPremium, rating, housingType,
+      roomCount, guestCount, price, amenities, firstName, lastName, email, avatarPath, latitude, longitude] = dataArray;
     const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
     const housingPhotos = housingPhotosString.split(';').map((photo) => photo);
     const user: User = { email, avatarPath, firstName, lastName};
+    const geoLocation: IGeoLocation = {
+      city,
+      geo: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+      }
+    };
 
     const offer: Offer = {
       title,
       description,
       postDate: new Date(postDateString),
-      city: city as CityName,
+      geoLocation,
       previewImage,
       housingPhotos,
       isPremium: Boolean(isPremium),
@@ -85,7 +92,7 @@ export class ImportCommand implements Command {
       title: offer.title,
       description: offer.description,
       postDate: offer.postDate,
-      city: offer.city,
+      geoLocation: offer.geoLocation,
       previewImage: offer.previewImage,
       housingPhotos: offer.housingPhotos,
       isPremium: offer.isPremium,

@@ -1,4 +1,4 @@
-import { CityName } from './geo.types.js';
+import { IGeoLocation } from './geo.types.js';
 import { User } from './index.js';
 
 export enum HousingType {
@@ -22,7 +22,7 @@ export type Offer = {
   title: string;
   description: string;
   postDate: Date;
-  city: CityName,
+  geoLocation: IGeoLocation,
   previewImage: string;
   housingPhotos: string[],
   isPremium: boolean,

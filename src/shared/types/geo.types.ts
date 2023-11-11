@@ -1,11 +1,11 @@
-export type Geo = {
+export interface IGeo {
   latitude: number;
   longitude: number;
-};
+}
 
-export type GeoLocation = {
-  city: string,
-  geo: Geo,
+export interface IGeoLocation {
+  city: string;
+  geo: IGeo;
 }
 
 export enum CityName {
@@ -18,7 +18,7 @@ export enum CityName {
 }
 
 export type GeoLocationDataType = {
-  [key in CityName]: Geo;
+  [key in CityName]: IGeo;
 };
 
 export const geoLocationData: GeoLocationDataType = {

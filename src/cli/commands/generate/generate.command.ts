@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import got from 'got';
 import { FileWritter } from '../../../shared/libs/index.js';
-import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, CityName } from '../../../shared/types/index.js';
-import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum } from '../../../shared/utils/index.js';
+import { LOAD_DATA_ERROR, MockServerData, HousingType, AmenityType, CityName, geoLocationData } from '../../../shared/types/index.js';
+import { getErrorMessage, getRandomItem, getRandomItems, getRandomNumber, getValueArrayFromEnum, getKeyArrayFromEnum } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { MIN_PRICE, MAX_PRICE, FIRST_WEEK_DAY, LAST_WEEK_DAY, HOUSING_PHOTO_COUNT, MIN_RATING, MAX_RATING,
   MIN_ROOM_COUNT, MAX_ROOM_COUNT, MIN_GUEST_COUNT, MAX_GUEST_COUNT } from './constants.js';
@@ -43,7 +43,7 @@ export class GenerateCommand implements Command {
 
     const housingValues = getValueArrayFromEnum(HousingType);
     const amenityValues = getValueArrayFromEnum(AmenityType);
-    const cityValues = getValueArrayFromEnum(CityName);
+    const cityKeys = getKeyArrayFromEnum(CityName);
 
     if(!this.serverData) {
       return lines;
@@ -52,7 +52,8 @@ export class GenerateCommand implements Command {
     for(let i = 0; i < offerCount; i++) {
       const title = getRandomItem(this.serverData.titles);
       const description = getRandomItem(this.serverData.descriptions);
-      const city = getRandomItem(cityValues);
+      const cityKey = getRandomItem(cityKeys);
+      const city = CityName[cityKey];
       const previewImage = getRandomItem(this.serverData.previewImages);
       const housingPhotos = getRandomItems(this.serverData.housingPhotos, HOUSING_PHOTO_COUNT).join(';');
       const isPremium = getRandomItem([true, false]).toString();
@@ -70,10 +71,12 @@ export class GenerateCommand implements Command {
         .subtract(getRandomNumber(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
         .toISOString();
       const [ firstName, lastName ] = author.split(' ');
+      const latitude = geoLocationData[city].latitude.toString();
+      const longitude = geoLocationData[city].longitude.toString();
 
       const line = [title, description, postDate, city,
         previewImage, housingPhotos, isPremium, rating, housingType, roomCount, guestCount, price, amenities,
-        firstName, lastName, email, avatar].join('\t');
+        firstName, lastName, email, avatar, latitude, longitude].join('\t');
 
       lines.push(line);
     }
