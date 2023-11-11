@@ -10,6 +10,9 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, trim: true })
   public text: string;
 
+  @prop({ required: true })
+  public rating: number;
+
   @prop({
     required: true,
     ref: OfferEntity,
