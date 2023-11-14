@@ -4,6 +4,7 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { CreateCommentDto } from './comment-dto.js';
 import { CommentEntity } from './comment-entity.js';
 import { ICommentService } from './types.js';
+import { MAX_COMMENT_COUNT } from './constants.js';
 
 import { Component } from '../../types/index.js';
 
@@ -19,7 +20,11 @@ export class CommentService implements ICommentService {
   }
 
   public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
-    return this.commentModel.find({ offerId }).populate('userId');
+    return this.commentModel
+      .find({ offerId })
+      .sort({ createdAt: -1 })
+      .limit(MAX_COMMENT_COUNT)
+      .populate('userId');
   }
 
   public async deleteByOfferId(offerId: string): Promise<number> {
