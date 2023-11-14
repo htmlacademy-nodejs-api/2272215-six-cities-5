@@ -26,11 +26,25 @@ export class OfferService implements IOfferService {
 
   public async find(offerCount: number = DEFAULT_RETURN_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     const _offerCount = offerCount > MAX_RETURN_OFFER_COUNT ? DEFAULT_RETURN_OFFER_COUNT : offerCount;
+
     return this.offerModel
-      .find()
-      .limit(_offerCount)
-      .sort({ createdAt: SortTypes.Down })
-      .populate(['userId'])
+      .aggregate([
+        {
+          $project: {
+            title: 1,
+            housingType: 1,
+            price: 1,
+            postDate: 1,
+            previewImage: 1,
+            isPremium: 1,
+            rating: 1,
+            commentCount: 1,
+            city: '$geoLocation.city'
+          }
+        },
+        { $sort: { postDate: SortTypes.Down } },
+        { $limit: _offerCount },
+      ])
       .exec();
   }
 
