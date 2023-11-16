@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import { READ_FILE_ERROR, Offer, OfferType, Category, User } from '../../../shared/types/index.js';
+import { READ_FILE_ERROR, Offer, User, HousingType, AmenityType, IGeoLocation } from '../../../shared/types/index.js';
 import { FileReader, ConsoleLogger, IDatabaseClient, ILogger, MongoDatabaseClient } from '../../../shared/libs/index.js';
-import { UserService, CategoryService, OfferService, userModel, categoryModel, offerModel, CreateOfferDto, CreateCategoryDto } from '../../../shared/modules/index.js';
+import { UserService, OfferService, userModel, offerModel, CreateOfferDto } from '../../../shared/modules/index.js';
 import { getErrorMessage, getMongoURI } from '../../../shared/utils/index.js';
 import { Command } from '../types/index.js';
 import { DB_USER_PASSWORD } from './constants.js';
@@ -10,7 +10,6 @@ export class ImportCommand implements Command {
   private logger: ILogger;
   private databaseClient: IDatabaseClient;
   private userService: UserService;
-  private categoryService: CategoryService;
   private offerService: OfferService;
   private salt: string;
 
@@ -21,7 +20,6 @@ export class ImportCommand implements Command {
     this.logger = new ConsoleLogger();
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.userService = new UserService(userModel, this.logger);
-    this.categoryService = new CategoryService(categoryModel, this.logger);
     this.offerService = new OfferService(offerModel, this.logger);
   }
 
@@ -54,45 +52,56 @@ export class ImportCommand implements Command {
   private getOffer(tsvLine: string): Offer {
     const dataArray = tsvLine.split('\t');
 
-    const [title, description, createdDate, image, type, price, categories, firstName, lastName, email, avatarPath] = dataArray;
-    const arrayCategories: Category[] = categories.split(';').map((cat) => ({name: cat}));
+    const [title, description, postDateString, city, previewImage, housingPhotosString, isPremium, rating, housingType,
+      roomCount, guestCount, price, amenities, firstName, lastName, email, avatarPath, latitude, longitude] = dataArray;
+    const amenityTypes: AmenityType[] = amenities.split(';').map((amenity) => amenity as AmenityType);
+    const housingPhotos = housingPhotosString.split(';').map((photo) => photo);
     const user: User = { email, avatarPath, firstName, lastName};
+    const geoLocation: IGeoLocation = {
+      city,
+      geo: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+      }
+    };
 
-    return {
+    const offer: Offer = {
       title,
       description,
-      postDate: new Date(createdDate),
-      image,
-      type: type as OfferType,
-      categories: arrayCategories,
+      postDate: new Date(postDateString),
+      geoLocation,
+      previewImage,
+      housingPhotos,
+      isPremium: Boolean(isPremium),
+      rating: Number(rating),
+      housingType: housingType as HousingType,
+      roomCount: parseInt(roomCount, 10),
+      guestCount: parseInt(guestCount, 10),
       price: Number.parseInt(price, 10),
+      amenities: amenityTypes,
       user,
     };
+
+    return offer;
   }
 
   private async saveOffer(offer: Offer): Promise<void> {
-    const categories: string[] = [];
-
     const user = await this.userService.findOrCreate({...offer.user, password: DB_USER_PASSWORD}, this.salt);
-
-    for (const category of offer.categories) {
-      const { name: categoryName } = category;
-      const categoryDto: CreateCategoryDto = { name: categoryName };
-      const categoryDocument = await this.categoryService.findByNameOrCreate(categoryName, categoryDto);
-
-      if(!categories.includes(categoryDocument.id)) {
-        categories.push(categoryDocument.id);
-      }
-    }
 
     const offerDto: CreateOfferDto = {
       title: offer.title,
       description: offer.description,
-      image: offer.image,
       postDate: offer.postDate,
+      geoLocation: offer.geoLocation,
+      previewImage: offer.previewImage,
+      housingPhotos: offer.housingPhotos,
+      isPremium: offer.isPremium,
+      rating: offer.rating,
+      housingType: offer.housingType,
+      roomCount: offer.roomCount,
+      guestCount: offer.guestCount,
       price: offer.price,
-      type: offer.type,
-      categories,
+      amenities: offer.amenities,
       userId: user.id,
     };
 

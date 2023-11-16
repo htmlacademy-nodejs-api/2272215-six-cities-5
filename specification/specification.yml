@@ -10,8 +10,6 @@ info:
 tags:
   - name: offers
     description: Действия с объявлениями.
-  - name: categories
-    description: Действия с категориями.
   - name: comments
     description: Действия с комментариями.
   - name: users

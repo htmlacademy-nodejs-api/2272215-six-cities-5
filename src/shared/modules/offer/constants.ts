@@ -1,0 +1,2 @@
+export const DEFAULT_RETURN_OFFER_COUNT = 60;
+export const MAX_RETURN_OFFER_COUNT = 500;

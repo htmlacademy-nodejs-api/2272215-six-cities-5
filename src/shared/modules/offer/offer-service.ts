@@ -1,10 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { ILogger } from '../../libs/index.js';
-import { Component } from '../../types/index.js';
-import { CreateOfferDto } from './offer-dto.js';
+import { Component, SortTypes } from '../../types/index.js';
+import { CreateOfferDto, UpdateOfferDto } from './offer-dto.js';
 import { OfferEntity } from './offer-entity.js';
 import { IOfferService } from './types.js';
+import { DEFAULT_RETURN_OFFER_COUNT, MAX_RETURN_OFFER_COUNT } from './constants.js';
 
 @injectable()
 export class OfferService implements IOfferService {
@@ -19,7 +20,48 @@ export class OfferService implements IOfferService {
     return newOffer;
   }
 
-  public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findById(id).exec();
+  public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findById(offerId).exec();
+  }
+
+  public async find(offerCount: number = DEFAULT_RETURN_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
+    const _offerCount = offerCount > MAX_RETURN_OFFER_COUNT ? DEFAULT_RETURN_OFFER_COUNT : offerCount;
+
+    return this.offerModel
+      .aggregate([
+        {
+          $project: {
+            title: 1,
+            housingType: 1,
+            price: 1,
+            postDate: 1,
+            previewImage: 1,
+            isPremium: 1,
+            rating: 1,
+            commentCount: 1,
+            city: '$geoLocation.city'
+          }
+        },
+        { $sort: { postDate: SortTypes.Down } },
+        { $limit: _offerCount },
+      ])
+      .exec();
+  }
+
+  public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, dto, {new: true})
+      .populate(['userId'])
+      .exec();
+  }
+
+  public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findByIdAndDelete(offerId).exec();
+  }
+
+  public async incrementCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {'$inc': { commentCount: 1 }}, {new: true})
+      .exec();
   }
 }

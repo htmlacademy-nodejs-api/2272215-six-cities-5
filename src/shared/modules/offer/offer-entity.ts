@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { prop, defaultClasses, Ref, modelOptions } from '@typegoose/typegoose';
-import { OfferType } from '../../types/index.js';
-import { CategoryEntity } from '../category/index.js';
+import { HousingType, AmenityType } from '../../types/index.js';
+import { GeoLocation } from '../geo-location/index.js';
 import { UserEntity } from '../user/index.js';
 
 @modelOptions({
@@ -17,31 +17,56 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, trim: true })
   public title: string;
 
-  @prop({ trim: true })
+  @prop({ required: true, trim: true })
   public description: string;
 
-  @prop()
+  @prop({ required: true })
   public postDate: Date;
 
-  @prop()
-  public image: string;
+  @prop({
+    required: true,
+    _id: false,
+    type: () => GeoLocation
+  })
+  public geoLocation: GeoLocation;
+
+  @prop({ required: true })
+  public previewImage: string;
+
+  @prop({
+    required: true,
+    type: () => String,
+  })
+  public housingPhotos: string[];
+
+  @prop({ required: true })
+  public isPremium: boolean;
+
+  @prop({ required: true })
+  public rating: number;
+
+  @prop({
+    required: true,
+    type: () => String,
+    enum: HousingType,
+  })
+  public housingType: HousingType;
+
+  @prop({ required: true })
+  public roomCount: number;
+
+  @prop({ required: true })
+  public guestCount: number;
 
   @prop()
   public price: number;
 
   @prop({
-    type: () => String,
-    enum: OfferType
-  })
-  public type: OfferType;
-
-  @prop({
     required: true,
-    ref: CategoryEntity,
-    default: [],
-    _id: false,
+    type: () => String,
+    enum: AmenityType,
   })
-  public categories: Ref<CategoryEntity>[];
+  public amenities: AmenityType[];
 
   @prop({
     required: true,
@@ -52,4 +77,3 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ default: 0 })
   public commentCount: number;
 }
-
