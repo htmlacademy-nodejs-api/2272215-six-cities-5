@@ -3,6 +3,8 @@ import { inject, injectable } from 'inversify';
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
+import { fillDTO } from '../../utils/index.js';
+import { OfferRdo } from './offer-rdo.js';
 import { IOfferService } from './types.js';
 
 @injectable()
@@ -21,7 +23,8 @@ export class OfferController extends BaseController {
 
   public async index(req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
-    this.ok(res, offers);
+    const responseData = fillDTO(OfferRdo, offers);
+    this.ok(res, responseData);
   }
 
   public create(req: Request, res: Response): void {
