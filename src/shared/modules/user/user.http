@@ -5,11 +5,11 @@ POST http://localhost:6000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "kate.r@test.mail",
-  "avatarPath": "kate.png",
-  "firstName": "Kate",
-  "lastName": "Ross",
-  "password": "kate-ross"
+  "email": "alex.g@test.mail",
+  "avatarPath": "alex-g.png",
+  "firstName": "Alex",
+  "lastName": "Grey",
+  "password": "alex-grey"
 }
 
 ###
