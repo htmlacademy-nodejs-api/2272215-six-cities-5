@@ -5,3 +5,26 @@ GET http://localhost:6000/offers HTTP/1.1
 Content-Type: application/json
 
 ###
+
+## Добавить новое предложение
+POST http://localhost:6000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Offer 2",
+  "description": "Description 2",
+  "postDate": "2023-11-04T19:32:33.308Z",
+  "geoLocation": {"city": "Paris", "geo": {"latitude": 48.85661,	"longitude": 2.351499}},
+  "previewImage": "preview.jpg",
+  "housingPhotos": ["photo-1.jpg"],
+  "isPremium": true,
+  "rating": 3,
+  "housingType": "hotel",
+  "roomCount": 4,
+  "guestCount": 2,
+  "price": 2,
+  "amenities": [],
+  "userId": "654fd727f8a76bb6253745ad"
+}
+
+###

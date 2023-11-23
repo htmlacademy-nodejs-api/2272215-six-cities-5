@@ -22,3 +22,7 @@ export interface IController {
   created<T>(res: Response, data: T): void;
   noContent<T>(res: Response, data: T): void;
 }
+
+export interface IExceptionFilter {
+  catch(error: Error, req: Request, res: Response, next: NextFunction): void;
+}

@@ -4,6 +4,7 @@ import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { ILogger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../utils/index.js';
+import { CreateOfferDto } from './offer-dto.js';
 import { OfferRdo } from './offer-rdo.js';
 import { IOfferService } from './types.js';
 
@@ -27,7 +28,13 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public create(req: Request, res: Response): void {
-    console.log('OfferController, create()');
+  public async create(
+    req: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
+    res: Response
+  ): Promise<void> {
+    const { body } = req;
+
+    const newOffer = await this.offerService.create(body);
+    this.created(res, fillDTO(OfferRdo, newOffer));
   }
 }
