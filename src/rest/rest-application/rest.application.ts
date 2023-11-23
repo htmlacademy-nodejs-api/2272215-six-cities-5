@@ -13,6 +13,7 @@ export class RestApplication {
     @inject(Component.Config) private readonly config: IConfig<RestSchema>,
     @inject(Component.DatabaseClient) private readonly database: IDatabaseClient,
     @inject(Component.OfferController) private readonly offerController: IController,
+    @inject(Component.UserController) private readonly userController: IController,
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: IExceptionFilter,
   ) {
     this.server = express();
@@ -62,6 +63,7 @@ export class RestApplication {
 
   private async initControllers() {
     this.server.use('/offers', this.offerController.router);
+    this.server.use('/users', this.userController.router);
   }
 
   private async initExceptionFilters() {
