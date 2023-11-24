@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { DocumentType } from '@typegoose/typegoose';
-import { CreateUserDto } from './user-dto.js';
+import { CreateUserDto, LoginUserDto } from './user-dto.js';
 import { UserEntity } from './user-entity.js';
 
 export interface IUserService {
@@ -11,3 +11,5 @@ export interface IUserService {
 }
 
 export type CreateUserRequest = Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>;
+
+export type LoginUserRequest = Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>;

@@ -5,7 +5,7 @@ import { ILogger, IConfig, RestSchema } from '../../libs/index.js';
 import { Component } from '../../types/index.js';
 import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
 import { fillDTO } from '../../utils/index.js';
-import { CreateUserRequest, IUserService } from './types.js';
+import { CreateUserRequest, LoginUserRequest, IUserService } from './types.js';
 import { UserRdo } from './user-rdo.js';
 
 @injectable()
@@ -19,6 +19,7 @@ export class UserController extends BaseController {
 
     this.logger.info('Register routes for UserController');
     this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
   }
 
   public async create (
@@ -36,5 +37,21 @@ export class UserController extends BaseController {
     const newUser = await this.userService.create(body, this.configService.get('SALT'));
     const userRdo = fillDTO(UserRdo, newUser);
     this.created(res, userRdo);
+  }
+
+  public async login(
+    req: LoginUserRequest,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<void> {
+    const { body } = req;
+
+    const foundUser = await this.userService.findByEmail(body.email);
+
+    if(!foundUser) {
+      throw new HttpError(StatusCodes.UNAUTHORIZED, `User with email ${body.email} not found`);
+    }
+
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'UserController: Not implemented');
   }
 }
