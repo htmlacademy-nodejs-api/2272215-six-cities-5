@@ -67,18 +67,36 @@ paths:
                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
         "401":
           description: Ошибка авторизации
+    # get:
+    #   tags:
+    #     - users
+    #   summary: Проверка состояния пользователя
+    #   description: Возвращает информацию по авторизованному пользователю
+  # /users/{userId}/avatar:
+  #   post:
+  #     tags:
+  #       - users
+  #     summary: Загрузить изображение аватара
+  #     description: Загружает изображение аватара пользователя. Изображение
+  #       аватара должно быть в формате `png` или `jpg`.
+  /offers:
     get:
       tags:
-        - users
-      summary: Проверка состояния пользователя
-      description: Возвращает информацию по авторизованному пользователю
-  /users/{userId}/avatar:
-    post:
-      tags:
-        - users
-      summary: Загрузить изображение аватара
-      description: Загружает изображение аватара пользователя. Изображение
-        аватара должно быть в формате `png` или `jpg`.
+       - offers
+      summary: Получение списка предложений
+      description: Возвращает список предложений
+      responses:
+         "200":
+          description: Список предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
 components:
   schemas:
     registerUser:
